@@ -2,49 +2,47 @@
 
 using namespace std;
 
-int n;
-bool areFriends[10][10]; 
+bool areFriend[10][10]; // 서로 친구인지 여부를 나타내는 2차원 배열
 
-// taken[i] �� i��° �л��� ¦�� ã�Ҵ°�
 
-int countPairings(bool taken[10]) {
-	int firstStudent = -1;
+int n, m;
 
-	for (int i = 0; i < n; i++) {
-		if (!taken[i]) {
-			firstStudent = i;
+int solve(bool completed[10]) {
+	int head = -1; // 가장 번호 빠른 학생 찾기
+	for (int i = 0; i < 10; ++i) {
+		if (!completed[i]) {
+			head = i;
 			break;
 		}
 	}
-	if (firstStudent == -1) return 1;
+	if (head == -1) return 1; // 기저 : 모든 학생이 짝을 찾은 경우
 	int ret = 0;
-	for (int p = firstStudent + 1; p < n; p++) {
-		if (!taken[p] && areFriends[firstStudent][p]) {
-			taken[firstStudent] = taken[p] = true;
-			ret += countPairings(taken);
-			taken[firstStudent] = taken[p] = false;
+	// head 학생과 짝을 지을 학생을 찾는다
+	for (int pairWith = head + 1; pairWith < n; ++pairWith) {
+		if (!completed[pairWith] && areFriend[head][pairWith]) {
+			completed[pairWith] = completed[head] = true;
+			ret += solve(completed);
+			completed[pairWith] = completed[head] = false;
 		}
 	}
 	return ret;
 }
 
 int main() {
-	int test;
-	bool taken[10];
+	int C;
+	bool completed[10]; // 짝을 지었는지 여부를 나타내는 2차원 배열
+	cin >> C;
+	while (C--) {
+		
+		cin >> n >> m; // n : 학생 수, m : 친구 쌍의 수
 
-	cin >> test;
-	if (test < 0 || test > 50) exit(-1);
-	for (int i = 0; i < test; i++) {
-		int pair;
-		cin >> n >> pair;
-		memset(areFriends, false, sizeof(areFriends));
-		memset(taken, false, sizeof(taken));
+		memset(areFriend, false, sizeof(areFriend));
+		memset(completed, false, sizeof(completed));
 
-		for (int j = 0; j < pair; j++) {
-			int s1, s2;
-			cin >> s1 >> s2;
-			areFriends[s1][s2] = areFriends[s2][s1] = true;
+		for (int i = 0; i < m; ++i) {
+			int first, second;
+			areFriend[first][second] = areFriend[second][first] = true;
 		}
-		cout << countPairings(taken) << endl;
+		cout << solve(completed) << endl;
 	}
 }
