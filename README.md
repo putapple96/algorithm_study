@@ -1,1 +1,1 @@
-## ALGOSPOT PS
+## 재밌는 PS
