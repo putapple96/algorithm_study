@@ -5,7 +5,7 @@ dy = [-1, 1, 0, 0]
 dx = [0, 0, -1, 1]
 
 
-def dfs(v, board):
+def bfs(v, board):
     q = deque()
     q.append(v)
 
@@ -37,7 +37,7 @@ ans = []
 for y in range(n):
     for x in range(n):
         if board[y][x] == 1:
-            ans.append(dfs((y,x), board))
+            ans.append(bfs((y,x), board))
 
 
 
